@@ -5,14 +5,19 @@ from tkinter.filedialog import askopenfilename
 import zipfile
 from jinja2 import Template
 import os
+from utils import constants
 
 
 def main():
     if not os.path.exists('logs'):
         os.makedirs('logs')
 
+    if not os.path.exists('challenges'):
+        os.makedirs('challenges')
+
     logging.basicConfig(filename='logs\\challenge_generator.log', level=logging.INFO, format='%(asctime)s %(message)s')
     logging.info('Started')
+
     challenge_name, language_choice = input().split()
 
     Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
@@ -22,6 +27,7 @@ def main():
         zip_ref.extractall("challenges\\" + challenge_name + "\\data")
 
     generate_code_challenge(challenge_name, language_choice)
+
     logging.info('Finished')
 
 
@@ -43,4 +49,3 @@ def generate_code_challenge(name, language):
 
 if __name__ == '__main__':
     main()
-
