@@ -23,27 +23,29 @@ def main():
     Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
     test_cases_zip = askopenfilename()  # show an "Open" dialog box and return the path to the selected file
 
-    with zipfile.ZipFile(test_cases_zip, "r") as zip_ref:
-        zip_ref.extractall("challenges\\" + challenge_name + "\\data")
+    with zipfile.ZipFile(test_cases_zip, 'r') as zip_ref:
+        zip_ref.extractall('challenges\\' + challenge_name + '\\data')
 
     generate_code_challenge(challenge_name, language_choice)
 
     logging.info('Finished')
 
 
-def generate_code_challenge(name, language):
-    if language == "1":
-        template_file = open("resources\\challenge_python_template.txt", "r")
-        extension = ".py"
-    elif language == "2":
-        template_file = open("resources\\challenge_csharp_template.txt", "r")
-        extension = ".cs"
+def generate_code_challenge(name, language_choice):
+    if language_choice not in constants.LANGUAGE:
+        msg = "This language is not handled or defined"
+        logging.error(msg)
+        raise TypeError(msg)
+
+    language = constants.LANGUAGE[language_choice]
+
+    template_file = open('resources\\challenge_' + language['name'] + '_template.txt', 'r')
 
     tm = Template(template_file.read())
 
     msg = tm.render(challenge_name=name)
 
-    code_file = open("challenges\\" + name + "\\" + name + extension, "a")
+    code_file = open('challenges\\' + name + '\\' + name + language['extension'], 'a')
     code_file.write(msg)
 
 
