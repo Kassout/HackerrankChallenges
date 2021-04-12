@@ -1,51 +1,71 @@
 #!/bin/python3
+import os
 import logging
-from tkinter import Tk  # from tkinter import Tk for Python 3.x
-from tkinter.filedialog import askopenfilename
 import zipfile
 from jinja2 import Template
-import os
 from utils import constants
+from tkinter import Tk  # from tkinter import Tk for Python 3.x
+from tkinter.filedialog import askopenfilename
 
 
 def main():
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
+
+    instantiate_logs()
 
     if not os.path.exists('challenges'):
         os.makedirs('challenges')
 
-    logging.basicConfig(filename='logs\\challenge_generator.log', level=logging.INFO, format='%(asctime)s %(message)s')
-    logging.info('Started')
+    challenge_name = input("Hello! Want to work on a new challenge?\nPlease give it a name: ")
 
-    challenge_name, language_choice = input().split()
+    skill_choice = None
+    while skill_choice not in list(constants.SKILL.keys()):
+        print("Please choose a challenge category:")
+        for i, skill in enumerate(constants.SKILL.values()):
+            print(str(i) + ") " + skill['name'])
+        skill_choice = input("Answer: ")
+    skill_choice = constants.SKILL[skill_choice]
+
+    language_choice = None
+    if len(skill_choice['compatibility']) > 1:
+        while language_choice not in list(constants.LANGUAGE.keys()):
+            print("Please choose a compatible language:")
+            for i, language in enumerate(skill_choice['compatibility']):
+                print(str(i) + ") " + language['name'])
+            language_choice = input("Answer: ")
+        language_choice = constants.LANGUAGE[language_choice]
+    else:
+        language_choice = skill_choice['compatibility'][0]
+
+    challenge_path = 'challenges\\' + skill_choice['path_name'] + '\\' + challenge_name + '\\' + \
+                     (('\\' + language_choice['name'] + '\\') if len(skill_choice['compatibility']) > 1 else '\\')
+    os.makedirs(challenge_path)
 
     Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
     test_cases_zip = askopenfilename()  # show an "Open" dialog box and return the path to the selected file
 
     with zipfile.ZipFile(test_cases_zip, 'r') as zip_ref:
-        zip_ref.extractall('challenges\\' + challenge_name + '\\data')
+        zip_ref.extractall(challenge_path + 'data')
 
-    generate_code_challenge(challenge_name, language_choice)
-
-    logging.info('Finished')
+    generate_code_challenge(challenge_name, challenge_path, language_choice)
 
 
-def generate_code_challenge(name, language_choice):
-    if language_choice not in constants.LANGUAGE:
-        msg = "This language is not handled or defined"
-        logging.error(msg)
-        raise TypeError(msg)
+def instantiate_logs():
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
 
-    language = constants.LANGUAGE[language_choice]
+    logging.basicConfig(filename='logs\\challenge_generator.log', level=logging.INFO, format='%(asctime)s %(message)s')
+    logging.info('Started')
 
-    template_file = open('resources\\challenge_' + language['name'] + '_template.txt', 'r')
+
+def generate_code_challenge(name, path, language_choice):
+
+    template_file = open('resources\\challenge_' + language_choice['name'] + '_template.txt', 'r')
 
     tm = Template(template_file.read())
 
     msg = tm.render(challenge_name=name)
 
-    code_file = open('challenges\\' + name + '\\' + name + language['extension'], 'a')
+    code_file = open(path + name + language_choice['extension'], 'a')
     code_file.write(msg)
 
 

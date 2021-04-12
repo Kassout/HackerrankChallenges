@@ -1,1 +1,21 @@
+#!/bin/python3
 
+import unittest
+import filecmp
+
+
+class {{ challenge_name }}(unittest.TestCase):
+
+    directory = "data\\output\\"
+
+    def test_file_equals(self):
+        for filename in os.listdir(directory):
+            if filename.endswith(".txt"):
+                print(os.path.join(directory, filename))
+            else:
+                continue
+        self.assertTrue(filecmp.cmp(path1, path2))
+
+
+if __name__ == '__main__':
+    unittest.main()

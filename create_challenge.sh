@@ -1,10 +1,11 @@
 #!/bin/bash
+cd "$(dirname "$0")"
 # This script will generate folders and files for a new hackerrank challenge
-# Usage: ./run_challenge.sh
+# Usage: ./new_challenge.sh
 
 # Execution
 echo "Start of script..."
 
-OUTPUT_PATH='{{ output_path }}'
+python core/challenge_generator.py
 
-
+echo "End of script."
