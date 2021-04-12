@@ -36,7 +36,7 @@ def main():
     else:
         language_choice = skill_choice['compatibility'][0]
 
-    challenge_path = 'challenges\\' + skill_choice['path_name'] + '\\' + challenge_name + '\\' + \
+    challenge_path = 'challenges\\' + skill_choice['path_name'] + '\\' + challenge_name + \
                      (('\\' + language_choice['name'] + '\\') if len(skill_choice['compatibility']) > 1 else '\\')
     os.makedirs(challenge_path)
 
@@ -47,6 +47,7 @@ def main():
         zip_ref.extractall(challenge_path + 'data')
 
     generate_code_challenge(challenge_name, challenge_path, language_choice)
+    generate_test_challenge(challenge_name, challenge_path, language_choice)
 
 
 def instantiate_logs():
@@ -62,10 +63,20 @@ def generate_code_challenge(name, path, language_choice):
     template_file = open('resources\\challenge_' + language_choice['name'] + '_template.txt', 'r')
 
     tm = Template(template_file.read())
-
     msg = tm.render(challenge_name=name)
 
     code_file = open(path + name + language_choice['extension'], 'a')
+    code_file.write(msg)
+
+
+def generate_test_challenge(name, path, language_choice):
+    os.makedirs(path + 'tests')
+    template_file = open('resources\\test_challenge_' + language_choice['name'] + '_template.txt', 'r')
+
+    tm = Template(template_file.read())
+    msg = tm.render(challenge_name=name, class_test_name=''.join(x.capitalize() for x in name.split('_')))
+
+    code_file = open(path + 'tests\\test_' + name + language_choice['extension'], 'a')
     code_file.write(msg)
 
 
