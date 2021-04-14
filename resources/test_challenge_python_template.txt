@@ -1,21 +1,16 @@
 import unittest
 import filecmp
-from os import listdir
-from os.path import isfile, join
 
 
 class {{ class_test_name }}(unittest.TestCase):
 
-    solution = ["..\\data\\output\\" + f for f in listdir("..\\data\\output") if isfile(join("..\\data\\output", f))]
-    answer = ["..\\output\\" + f for f in listdir("..\\output") if isfile(join("..\\output", f))]
+    {% for index in outputs -%}
+        def test_{{ challenge_name }}_{{ index }}(self):
+            solution = "data\\output\\output{{ index }}.txt"
+            answer = "output\\output{{ index }}.txt"
+            self.assertTrue(filecmp.cmp(solution, answer, shallow=False))
 
-    def test_count_files(self):
-        self.assertEqual(len(self.solution), len(self.answer))
-
-    def test_{{ challenge_name }}(self):
-        for i in range(len(self.answer)):
-            self.assertTrue(filecmp.cmp(self.solution[i], self.answer[i]))
-
+    {% endfor %}
 
 if __name__ == '__main__':
     unittest.main()

@@ -47,7 +47,10 @@ def main():
         zip_ref.extractall(challenge_path + 'data')
 
     generate_code_challenge(challenge_name, challenge_path, language_choice)
+
     generate_test_challenge(challenge_name, challenge_path, language_choice)
+
+    generate_run_challenge(challenge_name, challenge_path, language_choice)
 
 
 def instantiate_logs():
@@ -73,10 +76,25 @@ def generate_test_challenge(name, path, language_choice):
     os.makedirs(path + 'tests')
     template_file = open('resources\\test_challenge_' + language_choice['name'] + '_template.txt', 'r')
 
+    outputs = []
+    for filename in os.listdir(path + 'data\\output'):
+        if filename.endswith(".txt"):
+            outputs.append(''.join(c for c in filename if c.isdigit()))
+
     tm = Template(template_file.read())
-    msg = tm.render(challenge_name=name, class_test_name=''.join(x.capitalize() for x in name.split('_')))
+    msg = tm.render(challenge_name=name, class_test_name=''.join(x.capitalize() for x in name.split('_')), outputs=outputs)
 
     code_file = open(path + 'tests\\test_' + name + language_choice['extension'], 'a')
+    code_file.write(msg)
+
+
+def generate_run_challenge(name, path, language_choice):
+    template_file = open('resources\\run_' + language_choice['name'] + '_challenge_shell_template.txt', 'r')
+
+    tm = Template(template_file.read())
+    msg = tm.render(challenge_name=name)
+
+    code_file = open(path + 'run_challenge.sh', 'a')
     code_file.write(msg)
 
 

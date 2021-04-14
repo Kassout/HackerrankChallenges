@@ -21,6 +21,6 @@ if __name__ == '__main__':
 
     result = {{ challenge_name }}(n, ar)
 
-    fptr.write(str(result) + '\n')
+    fptr.write(str(result))
 
     fptr.close()
