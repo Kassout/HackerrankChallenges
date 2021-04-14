@@ -10,11 +10,11 @@ class {{ class_test_name }}(unittest.TestCase):
         def test_{{ challenge_name }}_{{ index }}(self):
             f_solution = open('data\\output\\output{{ index }}.txt', 'r')
             solution = f_solution.read().replace("\n", "").replace("\r", "")
-            f_answer = open('output\\output{{ index }}.txt'"', 'r')
-            answer = f_answer.read().replace("\n", "").replace("\r", "")
-            self.assertEqual(solution, answer)
             f_solution.close()
+            f_answer = open('output\\output{{ index }}.txt', 'r')
+            answer = f_answer.read().replace("\n", "").replace("\r", "")
             f_answer.close()
+            self.assertEqual(solution, answer)
 
     {% endfor %}
 if __name__ == '__main__':
