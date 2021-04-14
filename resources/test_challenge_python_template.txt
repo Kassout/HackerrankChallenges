@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import unittest
 import filecmp
 
@@ -6,11 +8,14 @@ class {{ class_test_name }}(unittest.TestCase):
 
     {% for index in outputs -%}
         def test_{{ challenge_name }}_{{ index }}(self):
-            solution = "data\\output\\output{{ index }}.txt"
-            answer = "output\\output{{ index }}.txt"
-            self.assertTrue(filecmp.cmp(solution, answer, shallow=False))
+            f_solution = open('data\\output\\output{{ index }}.txt', 'r')
+            solution = f_solution.read().replace("\n", "").replace("\r", "")
+            f_answer = open('output\\output{{ index }}.txt'"', 'r')
+            answer = f_answer.read().replace("\n", "").replace("\r", "")
+            self.assertEqual(solution, answer)
+            f_solution.close()
+            f_answer.close()
 
     {% endfor %}
-
 if __name__ == '__main__':
     unittest.main()
