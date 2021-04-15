@@ -73,3 +73,18 @@
 2021-04-15 14:11:24,346 Start run challenge bash script generation.
 2021-04-15 14:11:24,347 End run challenge bash script generation.
 2021-04-15 14:11:24,347 Ended
+2021-04-15 15:04:10,767 Started
+2021-04-15 15:04:23,724 Start challenge category choice.
+2021-04-15 15:04:25,074 End challenge category choice.
+2021-04-15 15:04:25,074 Start challenge language choice.
+2021-04-15 15:04:25,074 End challenge category choice.
+2021-04-15 15:04:25,363 End challenge language choice.
+2021-04-15 15:04:25,363 Start folder and starter files generation.
+2021-04-15 15:04:36,214 End folder and starter files generation.
+2021-04-15 15:04:36,214 Start challenge code generation.
+2021-04-15 15:04:36,216 End challenge code generation.
+2021-04-15 15:04:36,216 Start challenge tests code generation.
+2021-04-15 15:04:36,218 End challenge tests code generation.
+2021-04-15 15:04:36,218 Start run challenge bash script generation.
+2021-04-15 15:04:36,220 End run challenge bash script generation.
+2021-04-15 15:04:36,220 Ended
